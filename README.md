@@ -1,3 +1,5 @@
+# 本地测试中，暂未上线，请稍等
+
 # 📺 Lightweight PHP EPG Service
 
 Welcome to the **Lightweight PHP EPG Service**! 🎉 This project is a simple yet efficient Electronic Program Guide (EPG) service built with PHP. It’s designed to be lightweight, easy to use, and perfect for small-scale EPG implementations.
