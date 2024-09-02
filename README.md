@@ -1,4 +1,4 @@
-# 本地测试中，暂未上线，请稍等
+# 最后测试阶段
 
 # 📺 Lightweight PHP EPG Service
 
