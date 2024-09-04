@@ -1,0 +1,328 @@
+body {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    font-family: Tahoma, Arial, sans-serif;
+    background-color: #f0f0f0;
+}
+.container {
+    background: white;
+    padding: 30px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border-radius: 5px;
+    width: 850px;
+    margin: auto;
+}
+.code-font {
+    font-family: Menlo, "Ubuntu Mono", "Droid Sans Mono", Consolas, Tahoma, monospace; /* 让字体更美观 */
+}
+textarea {
+    width: 100%;
+    padding: 5px;
+    line-height: 1.5;
+    font-size: 15px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    resize: none;
+    font-family: Tahoma;
+    white-space: pre-wrap; /* 保持空白字符和换行符，同时在内容超出容器宽度时换行 */
+    word-break: break-all; /* 允许单词内断行 */
+}
+textarea[id="cronLogContent"], textarea[id="channelList"] {
+    white-space: pre-wrap; /* 自动换行 */
+}
+.form-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+/* 为选择框与标签的间距添加样式 */
+#disable_elements {
+    margin-right: 10px;
+    cursor: pointer;
+}
+
+/* 标签样式 */
+.label-days-to-keep, .label-time, .label-time2, .label-time3 {
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    color: #333;
+    display: inline-block;
+    margin-bottom: 10px;
+}
+
+/* 自定义的边距样式 */
+.custom-margin1 {
+    margin-left: 168px;
+}
+
+.custom-margin2,
+.custom-margin3 {
+    margin-left: 70px;
+}
+
+/* 禁用状态的样式 */
+.disabled {
+    pointer-events: none;
+    opacity: 0.5;
+    color: #999;
+}
+
+/* 鼠标悬停时的提示样式 */
+.label-days-to-keep:hover, .label-time:hover, .label-time2:hover, .label-time3:hover {
+    text-decoration: underline;
+}
+
+.form-row select, 
+.modal-content select {
+    font-family: Tahoma;
+    padding: 6px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    width: 120px;
+    margin-right: 88px;
+    text-align: center;
+}
+.form-row input[type="time"] {
+    padding: 5px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    width: 90px;
+}
+.form-row input[id="start_time"] {
+    margin-left: 166px;
+}
+.form-row input[id="end_time"],
+select[id="interval_hour"]{
+    margin-left: 44px;
+}
+.form-row select[id="interval_hour"], select[id="interval_minute"] {
+    width: 70px;
+    margin-right: 0px;
+    text-align: center;
+}
+input[type="submit"],
+.modal-content button {
+    width: 100%;
+    padding: 10px;
+    background-color: #FF9800;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    box-sizing: border-box;
+    font-size: 16px;
+    font-weight: bold;
+}
+input[type="submit"]:hover {
+    background-color: #e68900;
+}
+input[type="text"] {
+    width: calc(100% - 22px);
+    padding: 10px;
+    margin-bottom: 10px;
+}
+.button-container {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+}
+.button-container a, .button-container button {
+    padding: 10px;
+    background-color: #2196F3;
+    color: white;
+    text-decoration: none;
+    border: none;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    box-sizing: border-box;
+    width: 32%;
+    font-size: 16px;
+}
+.button-container a:hover, .button-container button:hover {
+    background-color: #0b7dda;
+}
+.flex-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 20px;
+}
+.flex-item {
+    width: 48%;
+}
+.footer {
+    position: fixed;
+    bottom: 10px;
+    width: 100%;
+    text-align: center;
+}
+.modal {
+    display: none; /* 默认隐藏 */
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+.modal-content {
+    background-color: #fefefe;
+    display: inline-block;
+    padding: 20px;
+    border: 1px solid #888;
+    text-align: left;
+    border-radius: 10px;
+    position: relative;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    top: 50%;
+    transform: translateY(-50%);
+}
+.update-log-modal-content {
+    max-width: 830px;
+    width: auto;
+}
+.cron-log-modal-content,
+.config-modal-content {
+    max-width: 65%;
+    width: 550px;
+}
+.config-modal-content {
+    width: 200px;
+}
+.channel-modal-content {
+    width: 300px;
+}
+.more-setting-modal-content {
+    width: 550px;
+}
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* 频道映射的 CSS 规则 */
+.table-wrapper {
+    height: 138px; /* 固定高度 */
+    overflow-y: scroll; /* 启用垂直滚动条 */
+    border: 1px solid #ccc; /* 外边框 */
+    font-size: 15px; /* 字体大小 */
+    line-height: 1.5;
+    border-radius: 5px; /* 圆角边框 */
+    word-break: break-all; /* 单词换行 */
+}
+#channelMappingsTable {
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: Tahoma; /* 设置字体 */
+    width: 100%; /* 表格宽度 */
+}
+#channelMappingsTable th {
+    text-align: left; /* 左对齐 */
+    width: 75%; /* 第一列宽度 */
+    padding: 0 5px; /* 左右内边距 */
+    border-bottom: 1.5px solid #ccc; /* 表头下边框 */
+    border-right: 1px solid #ccc; /* 表头右边框 */
+}
+#channelMappingsTable td {
+    padding: 0 5px; /* 左右内边距 */
+    border-bottom: 1px solid #ccc; /* 行间隔 */
+    border-right: 1px solid #ccc; /* 竖的内边框 */
+}
+#channelMappingsTable tr:last-child td {
+    /* 移除最后一行的底部边框 */
+    border-bottom: none;
+}
+.table-container {
+    height: 440px; /* 固定高度 */
+    overflow-y: scroll; /* 启用垂直滚动条 */
+}
+#logTable {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 5px; /* 调整行之间的垂直间距 */
+    table-layout: fixed; /* 固定表格布局，防止内容超出 */
+}
+#logTable th, #logTable td {
+    border: 1px solid black;
+    padding: 5px;
+    text-align: left;
+}
+#logTable th:nth-child(1), 
+#logTable td:nth-child(1) {
+    width: 10%; /* 第一列宽度 */
+    text-align: center;
+}
+#logTable th:nth-child(2), 
+#logTable td:nth-child(2) {
+    word-break: break-all; /* 允许单词内断行 */
+}
+#logTable th:nth-child(2) {
+    text-align: center; /* 第二列表头居中 */
+}
+.modal-content select[id="gen_xml"],
+select[id="include_future_only"],
+select[id="proc_chname"] {
+    width: 155px;
+    text-align: center;
+    margin-right: 0px;
+}
+.modal-content select[id="gen_xml"] {
+    width: 100px;
+    margin-right: 25px;
+}
+.modal-content select[id="proc_chname"] {
+    width: 82px;
+    margin-right: 25px;
+}
+.modal-content select[id="ret_default"] {
+    width: 81px;
+    margin-right: 0px;
+}
+/* 工具提示容器 */
+.tooltip {
+    position: relative;
+    display: inline-block;
+    width: 100%;
+}
+/* 工具提示文本 */
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: #555;
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* 上方显示 */
+    left: 50%;
+    margin-left: -60px;
+    opacity: 0;
+    transition: opacity 0.3s;
+    font-size: 14px; /* 设置字体大小 */
+}
+/* 显示工具提示 */
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+    opacity: 1;
+}

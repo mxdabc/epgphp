@@ -1,6 +1,11 @@
+> [!IMPORTANT]  
+> 本项目文档正在编写中，还不够完善。
+
 # 📺 轻量级 PHP 版 EPG 服务
 
-欢迎使用 **轻量级 PHP 版 EPG 服务**！🎉 这是一个简单而高效的电子节目指南（EPG）服务，使用 PHP 构建。它设计得非常轻量级，易于使用，特别适合小规模的 EPG 实现。
+> Language: [English](README.md)   [简体中文](README_zh-CN.md) 
+
+欢迎使用 **轻量级 PHP 版 EPG 服务**！🎉 这是一个简单而高效的电子节目指南（EPG）服务，使用 PHP 构建。它设计得非常轻量级，易于使用，特别适合低配置服务器、没有Docker和需要高并发场景的 EPG 实现。
 
 ## 🚀 功能特色
 
@@ -19,16 +24,16 @@
    ```bash
    cd epgphp
    ```
-3. **运行服务**：
+3. **运行服务(临时)**：
    ```bash
    php -S localhost:8000
    ```
 4. **访问服务**：
-   打开浏览器并访问 `http://localhost:8000`。
+   打开浏览器并访问 `http://localhost:8000/manage.php`。
 
 ## 📚 使用说明
 
-1. **添加您的 EPG 数据**：自定义 `epg-data.php` 文件，添加您的电视节目表数据。
+1. **添加您的 EPG 数据**：自定义 `manage.php` 文件，添加您的电视节目表数据。
 2. **查询服务**：发送 HTTP GET 请求来获取 EPG 信息。
 3. **自定义**：根据具体需求修改代码。
 
@@ -37,7 +42,7 @@
 以下是一个简单的查询示例：
 
 ```php
-http://localhost:8000?channel=BBC&date=2024-08-14
+http://localhost:8000/index.php?channel=BBC&date=2024-08-14
 ```
 
 ## 👥 贡献
@@ -46,14 +51,9 @@ http://localhost:8000?channel=BBC&date=2024-08-14
 
 ## 📝 许可证
 
+原创作品：https://github.com/TakcC/PHP-EPG-Docker-Server
+
+本仓库为我自己的修改版，更适合在没有Docker和需要高并发场景下使用。
+
 本项目采用 BSD-3-Clause 许可证。有关详细信息，请参阅 [LICENSE](LICENSE) 文件。
 
----
-
-在 GitHub 上查看仓库：[mxdabc/epgphp](https://github.com/mxdabc/epgphp) 📂
-
----
-
-享受您的轻量级 PHP 版 EPG 服务吧！😎
-
----
