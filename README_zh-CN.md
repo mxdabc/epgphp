@@ -1,6 +1,8 @@
 > [!IMPORTANT]  
 > 本项目文档正在编写中，还不够完善。
 
+![Intro](https://socialify.git.ci/mxdabc/epgphp/image?description=1&font=Jost&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Light)
+
 # 📺 轻量级 PHP 版 EPG 服务
 
 > Language: [English](README.md)   [简体中文](README_zh-CN.md) 
