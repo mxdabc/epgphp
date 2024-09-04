@@ -1,5 +1,7 @@
 > [!IMPORTANT]  
-> The documentation for this project is still under preparation and is not yet complete. 
+> The documentation for this project is still under preparation and is not yet complete.
+
+![Intro](https://socialify.git.ci/mxdabc/epgphp/image?description=1&font=Jost&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Light)
 
 # 📺 Lightweight PHP EPG Service
 
