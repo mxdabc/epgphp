@@ -1,7 +1,7 @@
 > [!IMPORTANT]  
 > 本项目文档正在编写中，还不够完善。
 
-![Intro](https://socialify.git.ci/mxdabc/epgphp/image?description=1&font=Jost&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Light)
+![Intro](https://socialify.git.ci/mxdabc/epgphp/image?description=1&descriptionEditable=PHP%E7%89%88%E7%9A%84EPG%E6%9C%8D%E5%8A%A1%EF%BC%8C%E6%9B%B4%E8%BD%BB%E9%87%8F%E3%80%82%20&font=Jost&forks=1&issues=1&language=1&name=1&owner=1&pulls=1&stargazers=1&theme=Light)
 
 # 📺 轻量级 PHP 版 EPG 服务
 
