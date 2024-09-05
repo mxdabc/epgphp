@@ -1,7 +1,6 @@
 {
     "xml_urls": [
-        "https:\/\/epg.erw.cc\/all.xml.gz",
-        "https:\/\/raw.githubusercontent.com\/sparkssssssssss\/epg\/main\/pp.xml",
+        "https:\/\/epg.crestekk.cn\/download\/all-mxdyeah.xml.gz",
         "http:\/\/epg.51zmt.top:8000\/e.xml"
     ],
     "days_to_keep": 1,

@@ -283,7 +283,7 @@ try {
         } catch (PDOException $e) {
             // 回滚事务
             $db->rollBack();
-            echo "数据库操作失败: " . $e->getMessage();
+            echo "数据库操作失败，原因如下: " . $e->getMessage();
         }
         exit;
     }
