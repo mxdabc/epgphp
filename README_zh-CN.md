@@ -57,5 +57,5 @@ http://localhost:8000/index.php?channel=BBC&date=2024-08-14
 
 本仓库为我自己的修改版，更适合在没有Docker和需要高并发场景下使用。
 
-本项目采用 BSD-3-Clause 许可证。有关详细信息，请参阅 [LICENSE](LICENSE) 文件。
+本项目采用 GPL-2.0 许可证。有关详细信息，请参阅 [LICENSE](LICENSE) 文件。
 
