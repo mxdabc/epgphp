@@ -57,5 +57,5 @@ Original work: https://github.com/TakcC/PHP-EPG-Docker-Server
 
 This repository is my own modified version, which is more suitable for use in scenarios without Docker and requiring high concurrency.
 
-This project is licensed under the BSD-3-Clause License. See the [LICENSE](LICENSE) file for more details.
+This project is licensed under the GPL-2.0 License. See the [LICENSE](LICENSE) file for more details.
 
