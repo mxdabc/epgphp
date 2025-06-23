@@ -494,7 +494,7 @@
         <!-- 第二行 -->
         <div class="row">
             <div class="column">
-                <label for="ret_default">返回此频道暂无预告或者您配置有误。：</label>
+                <label for="ret_default">返回"无频道"字符串：</label>
                 <select id="ret_default" name="ret_default" required>
                     <option value="1" <?php if (!isset($Config['ret_default']) || $Config['ret_default'] == 1) echo 'selected'; ?>>是</option>
                     <option value="0" <?php if (isset($Config['ret_default']) && $Config['ret_default'] == 0) echo 'selected'; ?>>否</option>

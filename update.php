@@ -25,6 +25,8 @@ echo '<title>更新数据</title>';
 // 引入公共脚本
 require_once 'public.php';
 
+ini_set('memory_limit', '256M');
+
 // 设置超时时间为20分钟
 set_time_limit(20*60);
 
@@ -33,12 +35,13 @@ function deleteOldData($db, &$log_messages) {
     global $Config, $thresholdDate;
 
     // 删除 t.xml 和 t.xml.gz 文件
-    if (!$Config['gen_xml']) {
-        @unlink(__DIR__ . '/t.xml');
-        @unlink(__DIR__ . '/t.xml.gz');
-        @unlink(__DIR__ . '/data/t.xml');
-        @unlink(__DIR__ . '/data/t.xml.gz');
-    }
+    @unlink(__DIR__ . '/t.xml');
+    @unlink(__DIR__ . '/t.xml.gz');
+
+    logMessage($log_messages, "[Start] 开始生成数据...");
+    
+    echo "<strong>请注意:在生成数据期间无法访问XMLTV文件和API接口</strong>";
+    echo "<br>";
 
     // 循环清理过期数据
     $tables = [
@@ -51,7 +54,7 @@ function deleteOldData($db, &$log_messages) {
         $stmt = $db->prepare("DELETE FROM $table WHERE $column < :thresholdDate");
         $stmt->bindValue(':thresholdDate', $thresholdDate, PDO::PARAM_STR);
         $stmt->execute();
-        logMessage($log_messages, "【{$logMessage}】 共 {$stmt->rowCount()} 条。");
+        logMessage($log_messages, "[{$logMessage}] 共 {$stmt->rowCount()} 条。");
     }
     
     // 清理 memcached 数据
@@ -59,12 +62,12 @@ function deleteOldData($db, &$log_messages) {
         $memcached = new Memcached();
         if ($memcached->addServer('127.0.0.1', 11211)) {
             $memcached->flush();
-            logMessage($log_messages, "【Memcached】 已清空。");
+            logMessage($log_messages, "[Memcached] 已清空。");
         } else {
-            logMessage($log_messages, "【Memcached】 状态异常。");
+            logMessage($log_messages, "[Memcached] 状态异常。");
         }
     } else {
-        logMessage($log_messages, "【Memcached】 未安装。");
+        logMessage($log_messages, "[Memcached] 未安装。");
     }
 
     // 清理 redis 数据
@@ -76,12 +79,12 @@ function deleteOldData($db, &$log_messages) {
                 $redis->auth($Config['redis_password']);
             }
             $redis->flushAll();
-            logMessage($log_messages, "【Redis】 已清空。");
+            logMessage($log_messages, "[Redis] 已清空。");
         } catch (Exception $e) {
-            logMessage($log_messages, "【Redis】 状态异常：" . $e->getMessage());
+            logMessage($log_messages, "[Redis] 状态异常：" . $e->getMessage());
         }
     } else {
-        logMessage($log_messages, "【Redis】 未安装。");
+        logMessage($log_messages, "[Redis] 未安装。");
     }
 
     echo "<br>";
@@ -166,7 +169,7 @@ function downloadXmlData($xml_url, $userAgent, $db, &$log_messages, $gen_list) {
         if (substr($xml_data, 0, 2) === "\x1F\x8B") { // 通过魔数判断 .gz 文件
             $xml_data = gzdecode($xml_data);
             if ($xml_data === false) {
-                logMessage($log_messages, ' 【解压缩失败！！！】');
+                logMessage($log_messages, ' [解压缩失败！！！]');
                 return;
             }
         }
@@ -176,7 +179,7 @@ function downloadXmlData($xml_url, $userAgent, $db, &$log_messages, $gen_list) {
         $fileSizeReadable = $fileSize >= 1048576 
             ? round($fileSize / 1048576, 2) . ' MB' 
             : round($fileSize / 1024, 2) . ' KB';
-        logMessage($log_messages, "【下载】 成功：xml 文件 {$fileSizeReadable}");
+        logMessage($log_messages, "[下载] 成功: xml 文件 {$fileSizeReadable}");
 
         $xml_data = preg_replace('/[\x00-\x1F]/u', ' ', $xml_data); // 清除所有控制字符
         if (isset($Config['all_chs']) && $Config['all_chs']) { $xml_data = t2s($xml_data); }
@@ -184,13 +187,13 @@ function downloadXmlData($xml_url, $userAgent, $db, &$log_messages, $gen_list) {
         try {
             $processCount = processXmlData($xml_url, $xml_data, $db, $gen_list);
             $db->commit();
-            logMessage($log_messages, "【更新】 成功：共 {$processCount} 条");
+            logMessage($log_messages, "[更新] 成功：共 {$processCount} 条");
         } catch (Exception $e) {
             $db->rollBack();
-            logMessage($log_messages, "【处理数据出错！！！】 " . $e->getMessage());
+            logMessage($log_messages, "[处理数据出错], 错误原因： " . $e->getMessage());
         }
     } else {
-        logMessage($log_messages, "【下载】 失败！！！");
+        logMessage($log_messages, "[下载EPG数据] 失败！！！");
     }    
     echo "<br>";
 }
@@ -363,10 +366,12 @@ function processIconListAndXmltv($db, $gen_list_mapping, &$log_messages) {
     // 更新 iconList.json 文件中的数据
     if (file_put_contents($iconListPath, 
         json_encode($iconList, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE)) === false) {
-        logMessage($log_messages, "【台标列表】 更新 iconList.json 时发生错误！！！");
+        logMessage($log_messages, "[台标列表] 更新 iconList.json 时发生错误！！！");
     } else {
-        logMessage($log_messages, "【台标列表】 已更新 iconList.json");
+        logMessage($log_messages, "[台标列表] 已更新 iconList.json");
     }
+
+    logMessage($log_messages, "[XMLTV] 开始生成并写入XMLTV文件...");
 
     // 判断是否生成 xmltv 文件
     if (empty($Config['gen_xml'])) {
@@ -374,12 +379,12 @@ function processIconListAndXmltv($db, $gen_list_mapping, &$log_messages) {
     }
     
     // 创建 XMLWriter 实例
-    $xmlFilePath = __DIR__ . '/data/t.xml';
+    $xmlFilePath = __DIR__ . '/t.xml';
     $xmlWriter = new XMLWriter();
     $xmlWriter->openUri($xmlFilePath);
     $xmlWriter->startDocument('1.0', 'UTF-8');
     $xmlWriter->startElement('tv');
-    $xmlWriter->writeAttribute('generator-info-name', 'Tak');
+    $xmlWriter->writeAttribute('generator-info-name', 'CrestekkEPG');
     $xmlWriter->writeAttribute('generator-info-url', 'https://github.com/mxdabc/epgphp');
     $xmlWriter->setIndent(true);
     $xmlWriter->setIndentString('	'); // 设置缩进
@@ -470,16 +475,14 @@ function processIconListAndXmltv($db, $gen_list_mapping, &$log_messages) {
     $xmlWriter->endDocument();
     $xmlWriter->flush();
 
+    logMessage($log_messages, "[XMLTV] 开始生成GZ压缩文件...");
+
     // 所有频道数据写入完成后，生成 t.xml.gz 文件
     compressXmlFile($xmlFilePath);
-    
-    // 建立 xmltv 软链接
-    if (!file_exists($xmlLinkPath = __DIR__ . '/t.xml')) {
-        symlink($xmlFilePath, $xmlLinkPath);
-        symlink($xmlFilePath . '.gz', $xmlLinkPath . '.gz');
-    }
 
-    logMessage($log_messages, "【预告文件】 已生成 t.xml、t.xml.gz");
+    logMessage($log_messages, "[XMLTV] GZ压缩文件压缩成功");
+
+    logMessage($log_messages, "[XMLTV] 已生成 t.xml 和 t.xml.gz");
 }
 
 // 生成 t.xml.gz 压缩文件
@@ -537,12 +540,12 @@ foreach ($Config['xml_urls'] as $xml_url) {
     list($xml_url_str, , $userAgent) = explode('#', $xml_url) + [1 => '', 2 => ''];
     $userAgent = trim($userAgent);
     $cleaned_url = trim(strpos($xml_url_str, '=>') !== false ? explode('=>', $xml_url_str)[1] : $xml_url_str);
-    logMessage($log_messages, "【地址】 $cleaned_url");
+    logMessage($log_messages, "[地址] $cleaned_url");
 
     // 判断是否有限定频道列表并下载数据
     if (strpos($xml_url_str, '=>') !== false) {
         $tmp_gen_list = array_map('trim', explode(",", explode('=>', $xml_url_str)[0]));
-        logMessage($log_messages, "【临时】 限定频道：" . implode(", ", $tmp_gen_list));
+        logMessage($log_messages, "[临时] 限定频道：" . implode(", ", $tmp_gen_list));
         downloadXmlData($cleaned_url, $userAgent, $db, $log_messages, $tmp_gen_list, 1);
     } else {
         downloadXmlData($cleaned_url, $userAgent, $db, $log_messages, $gen_list);
@@ -556,9 +559,9 @@ processIconListAndXmltv($db, $gen_list_mapping, $log_messages);
 if (isset($Config['live_source_auto_sync']) && $Config['live_source_auto_sync'] == 1) {
     $parseResult = doParseSourceInfo();
     if ($parseResult !== true) {
-        logMessage($log_messages, "【直播文件】 部分更新异常：" . rtrim(str_replace('<br>', '、', $parseResult), '、'));
+        logMessage($log_messages, "[直播文件] 部分更新异常：" . rtrim(str_replace('<br>', '、', $parseResult), '、'));
     } else {
-        logMessage($log_messages, "【直播文件】 已同步更新");
+        logMessage($log_messages, "[直播文件] 已同步更新");
     }
 }
 
@@ -571,7 +574,7 @@ $endTime = microtime(true);
 // 计算运行时间（以秒为单位）
 $executionTime = round($endTime - $startTime, 1);
 echo "<br>";
-logMessage($log_messages, "【更新完成】 {$executionTime} 秒。节目天数：更新前 {$initialCount} ，更新后 {$finalCount} 。" . $msg);
+logMessage($log_messages, "[更新完成] {$executionTime} 秒。节目天数：更新前 {$initialCount} ，更新后 {$finalCount} 。" . $msg);
 
 // 将日志信息写入数据库
 $log_message_str = implode("<br>", $log_messages);

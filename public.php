@@ -32,13 +32,6 @@ $host = $_SERVER['HTTP_X_FORWARDED_HOST'] ?? $_SERVER['HTTP_HOST'] ?? '';
 $uri = rtrim(strtok(dirname($_SERVER['HTTP_X_ORIGINAL_URI'] ?? @$_SERVER['REQUEST_URI']) ?? '', '?'), '/');
 $serverUrl = $protocol . '://' . $host . $uri;
 
-// 建立 xmltv 软链接
-if ($Config['gen_xml'] && file_exists($xmlFilePath = __DIR__ . '/data/t.xml')
-    && !file_exists($xmlLinkPath = __DIR__ . '/t.xml')) {
-    symlink($xmlFilePath, $xmlLinkPath);
-    symlink($xmlFilePath . '.gz', $xmlLinkPath . '.gz');
-}
-
 // 设置时区为亚洲/上海
 date_default_timezone_set("Asia/Shanghai");
 
@@ -185,7 +178,7 @@ function downloadData($url, $userAgent = '', $timeout = 30, $connectTimeout = 10
         CURLOPT_CONNECTTIMEOUT => $connectTimeout,
         CURLOPT_HTTPHEADER => [
             'User-Agent: ' . $userAgent ?: 
-                'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:128.0) Gecko/20100101 Firefox/128.0',
+                'CrestekkPf/1.2.0 (compatible; EPGCrawl/1.0.0; EPGVer/1.0.0; +https://www.mxdyeah.top/pages/spider/)',
             'Accept: */*',
             'Connection: keep-alive'
         ]
@@ -243,7 +236,7 @@ function processTvmaoJsonData($data_str) {
         list($channelName, $channelId) = array_map('trim', explode(':', trim($tvmao_info)) + [null, $tvmao_info]);
         $channelProgrammes[$channelId]['channel_name'] = cleanChannelName($channelName);
 
-        $json_url = "https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?query={$channelId}&resource_id=12520&format=json";
+        $json_url = "https://sp0.baidu.com/8aQDcjqpAAV3otqbppnN2DJv/api.php?query={$channelId}&resource_id=12520&format=json"; //? 最好不要用
         $json_data = downloadData($json_url);
         $json_data = mb_convert_encoding($json_data, 'UTF-8', 'GBK');
         $data = json_decode($json_data, true);
