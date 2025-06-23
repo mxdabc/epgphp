@@ -178,7 +178,7 @@ function downloadData($url, $userAgent = '', $timeout = 30, $connectTimeout = 10
         CURLOPT_CONNECTTIMEOUT => $connectTimeout,
         CURLOPT_HTTPHEADER => [
             'User-Agent: ' . $userAgent ?: 
-                'CrestekkPf/1.2.0 (compatible; EPGCrawl/1.0.0; EPGVer/1.0.0; +https://www.mxdyeah.top/pages/spider/)',
+                'CrestekkPf/1.2.0 (compatible; EPGCrawl/1.4.0; EPGVer/4.0; +https://www.mxdyeah.top/pages/spider/)',
             'Accept: */*',
             'Connection: keep-alive'
         ]
